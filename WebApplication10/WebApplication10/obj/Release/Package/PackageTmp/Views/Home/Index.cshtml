@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<h2>Home Page</h2>
+@if (Context.User.Identity.IsAuthenticated)
+{
+    <li>
+        @Html.ActionLink("Show Projects", "Index", "Project")
+        </li>
+        if (ViewBag.Role == "Admin")
+        {
+            <li>
+                @Html.ActionLink("Add/Disable Steps", "Index", new { controller = "Steps"})
+            </li>
+        }
+
+}
+
+
+        
+

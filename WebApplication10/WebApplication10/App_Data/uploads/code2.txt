@@ -1,0 +1,35 @@
+		  try
+		  {
+			  SocketConnecter si;
+			  while (!si.connect("localhost", 8081))
+			  {
+				  //Show::write("\n client waiting to connect");
+				  ::Sleep(100);
+			  }
+			  std::string msg;
+			  while (true)
+			  {
+				  HttpMessage msg = msgQ.deQ();
+				  // process request
+				  if ((msg.attributes()[0].first == "GET") && (msg.attributes()[0].second == "files"))
+				  {
+					  HttpMessage httpMessage;
+					  httpMessage.addAttribute(HttpMessage::attribute("POST", "filelist"));
+
+					  // GET FILES FROM CURRENT DIRECTORY
+					  httpMessage.addAttribute(HttpMessage::attribute("FILE", "file1.cpp"));
+					  httpMessage.addAttribute(HttpMessage::attribute("FILE", "file2.cpp"));
+					  httpMessage.addAttribute(HttpMessage::attribute("FILE", "file3.cpp"));
+					  httpMessage.addAttribute(HttpMessage::attribute("FILE", "file4.cpp"));
+					  // send back message
+					  si.sendString(httpMessage.toString());
+				  }
+				  Show::write("\n\n  server recvd message contents:\n" + msg.bodyString());
+			  }
+
+			  std::cout << "\n  channel closed";
+		  }
+		  catch (std::exception ex)
+		  {
+			  std::cout << ex.what() << "\n";
+		  }
